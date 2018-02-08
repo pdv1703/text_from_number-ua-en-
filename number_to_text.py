@@ -3,8 +3,6 @@ from PyQt5.QtWidgets import (QWidget, QApplication, QTextEdit, QPushButton,
                              QLabel, QGridLayout, QComboBox, QDoubleSpinBox)
 
 import decimal
-import locale
-
 
 class Example(QWidget):
     def __init__(self):
@@ -78,7 +76,7 @@ class Example(QWidget):
         else:
             if int(number[0]) == 1:
                 self.exit_text.setText("одна гривня")
-            elif int(number[0]) == 2 or 3 or 4:
+            elif int(number[0]) == 2 or int(number[0]) == 3 or int(number[0]) == 4:
                 self.exit_text.setText(
                     self.int_to_ua(int(number[0])) + " гривні")
             else:
@@ -88,14 +86,13 @@ class Example(QWidget):
             if int(number[0]) == 0 and int(number[1]) != 0:
                 if int(number[1]) == 1:
                     self.exit_text.setText("одна копійка")
-                elif int(number[1]) == 6 or 5 or 6 or 7 or 8 or 9 or 10:
-                    self.uah = self.exit_text.toPlainText()
-                    self.exit_text.setText(
-                        self.int_to_ua(int(number[1])) + " копійок")
-                else:
+                elif int(number[1]) == 4 or int(number[1]) == 3 or int(number[1]) == 2:
                     self.uah = self.exit_text.toPlainText()
                     self.exit_text.setText(
                         self.int_to_ua(int(number[1])) + " копійки")
+                else:
+                    self.uah = self.exit_text.toPlainText()
+                    self.exit_text.setText(self.int_to_ua(int(number[1])) + " копійок")
 
             else:
                 if int(number[1]) == 1:
@@ -279,7 +276,7 @@ class Example(QWidget):
     def int_to_ua(self, num, main_units=((u'', u'', u''), 'm')):
         _orders = (main_units, ) + self.orders
         if num == 0:
-            return ' '.join((self.units[0], _orders[0][0][2])).strip()  # ноль
+            return ' '.join((self.units[0], _orders[0][0][2])).strip()
 
         rest = abs(num)
         ord = 0
