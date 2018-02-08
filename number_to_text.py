@@ -15,10 +15,8 @@ class Example(QWidget):
 
         # line for inserting
         self.insert_number_line = QDoubleSpinBox()
-        print(QDoubleSpinBox().locale())
 
         self.insert_number_line.setRange(0, 2147483647)
-        #print(self.insert_number_line.locale())
         self.insert_number_line.editingFinished.connect(self.convert)
 
         # language list
@@ -80,8 +78,7 @@ class Example(QWidget):
         else:
             if int(number[0]) == 1:
                 self.exit_text.setText("одна гривня")
-            elif int(number[0]) == 2 or int(number[0]) == 3 or int(
-                    number[0]) == 4:
+            elif int(number[0]) == 2 or 3 or 4:
                 self.exit_text.setText(
                     self.int_to_ua(int(number[0])) + " гривні")
             else:
@@ -91,6 +88,10 @@ class Example(QWidget):
             if int(number[0]) == 0 and int(number[1]) != 0:
                 if int(number[1]) == 1:
                     self.exit_text.setText("одна копійка")
+                elif int(number[1]) == 6 or 5 or 6 or 7 or 8 or 9 or 10:
+                    self.uah = self.exit_text.toPlainText()
+                    self.exit_text.setText(
+                        self.int_to_ua(int(number[1])) + " копійок")
                 else:
                     self.uah = self.exit_text.toPlainText()
                     self.exit_text.setText(
@@ -99,7 +100,7 @@ class Example(QWidget):
             else:
                 if int(number[1]) == 1:
                     self.uah = self.exit_text.toPlainText()
-                    self.exit_text.setText(self.dollars + " та одна копійка")
+                    self.exit_text.setText(self.uah + " та одна копійка")
                 else:
                     if int(number[1]) != 0:
                         self.uah = self.exit_text.toPlainText()
