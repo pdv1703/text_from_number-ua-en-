@@ -3,6 +3,7 @@ from PyQt5.QtWidgets import (QWidget, QApplication, QTextEdit, QPushButton,
                              QLabel, QGridLayout, QComboBox, QDoubleSpinBox)
 
 import decimal
+import locale
 
 
 class Example(QWidget):
@@ -14,8 +15,11 @@ class Example(QWidget):
 
         # line for inserting
         self.insert_number_line = QDoubleSpinBox()
+        print(QDoubleSpinBox().locale())
 
         self.insert_number_line.setRange(0, 2147483647)
+        #print(self.insert_number_line.locale())
+        self.insert_number_line.editingFinished.connect(self.convert)
 
         # language list
         self.language_title = QLabel('Language:')
@@ -23,6 +27,7 @@ class Example(QWidget):
         self.language.setFixedWidth(50)
         self.language.addItem('En')
         self.language.addItem('Ua')
+
 
         self.exit_text = QTextEdit()
         # self.exit_text.setEnabled(0)
