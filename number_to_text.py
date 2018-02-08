@@ -85,21 +85,20 @@ class Example(QWidget):
                     self.int_to_ua(int(number[0])) + " гривень")
 
             if int(number[0]) == 0 and int(number[1]) != 0:
-
-                if number[1] == '01':
+                if int(number[1]) == 1:
                     self.uah = self.exit_text.toPlainText()
                     self.exit_text.setText("одна копійка")
-                elif int(coin[1]) == 1 and number[1] != '01':
-                    self.uah = self.exit_text.toPlainText()
-                    self.exit_text.setText(
-                        self.int_to_ua(int(number[1])) + " копійка")
                 elif int(coin[1]) == 4 or int(coin[1]) == 3 or int(coin[1]) == 2:
-                    self.uah = self.exit_text.toPlainText()
-                    self.exit_text.setText(
-                        self.int_to_ua(int(number[1])) + " копійки")
+                    if int(number[1]) == 14 or int(number[1]) == 13 or int(number[1]) == 12:
+                        self.uah = self.exit_text.toPlainText()
+                        self.exit_text.setText(self.int_to_ua(int(number[1])) + " копійок")
+                    else:
+                        self.uah = self.exit_text.toPlainText()
+                        self.exit_text.setText(self.int_to_ua(int(number[1])) + " копійки")
                 else:
-                    self.uah = self.exit_text.toPlainText()
-                    self.exit_text.setText(self.int_to_ua(int(number[1])) + " копійок")
+                    if int(number[1]) != 0:
+                        self.uah = self.exit_text.toPlainText()
+                        self.exit_text.setText(self.int_to_ua(int(number[1])) + " копійок")
 
             else:
                 if int(number[1]) == 1:
