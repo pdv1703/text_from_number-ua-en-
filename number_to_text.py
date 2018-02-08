@@ -14,7 +14,6 @@ class Example(QWidget):
 
         # line for inserting
         self.insert_number_line = QDoubleSpinBox()
-        print(self.insert_number_line.locale().decimalPoint())
 
         self.insert_number_line.setRange(0, 2147483647)
 
