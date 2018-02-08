@@ -70,6 +70,7 @@ class Example(QWidget):
 
     def convert_ua(self, number):
         """General Ua func"""
+        coin = number[1]
 
         if int(number[0]) == 0 and int(number[1]) == 0:
             self.exit_text.setText("нуль гривень")
@@ -82,28 +83,35 @@ class Example(QWidget):
             else:
                 self.exit_text.setText(
                     self.int_to_ua(int(number[0])) + " гривень")
-
+                
             if int(number[0]) == 0 and int(number[1]) != 0:
-                if int(number[1]) == 1:
-                    self.exit_text.setText("одна копійка")
-                elif int(number[1]) == 4 or int(number[1]) == 3 or int(number[1]) == 2:
+                if int(coin[1]) == 1:
+                    self.uah = self.exit_text.toPlainText()
+                    self.exit_text.setText(
+                        self.int_to_ua(int(number[1])) + " копійка")
+                elif int(coin[1]) == 4 or int(coin[1]) == 3 or int(coin[1]) == 2:
                     self.uah = self.exit_text.toPlainText()
                     self.exit_text.setText(
                         self.int_to_ua(int(number[1])) + " копійки")
                 else:
                     self.uah = self.exit_text.toPlainText()
                     self.exit_text.setText(self.int_to_ua(int(number[1])) + " копійок")
-
             else:
                 if int(number[1]) == 1:
                     self.uah = self.exit_text.toPlainText()
                     self.exit_text.setText(self.uah + " та одна копійка")
+                elif int(coin[1]) == 4 or int(coin[1]) == 3 or int(coin[1]) == 2:
+                    self.uah = self.exit_text.toPlainText()
+                    self.exit_text.setText(
+                        self.uah + " та " +
+                        self.int_to_ua(int(number[1])) + " копійки")
                 else:
                     if int(number[1]) != 0:
                         self.uah = self.exit_text.toPlainText()
                         self.exit_text.setText(
                             self.uah + " та " +
                             self.int_to_ua(int(number[1])) + " копійок")
+
 
     def convert_en(self, number):
         """General En func"""
