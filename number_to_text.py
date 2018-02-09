@@ -101,17 +101,27 @@ class Example(QWidget):
             coin = coin[1]
         coin = int(coin)
 
-        if int(number[0]) == 0 and int(number[1]) == 0:
-            self.exit_text.setText("нуль гривень")
+        # if int(number[0]) == 0 and int(number[1]) == 0:
+        #     self.exit_text.setText("нуль гривень")
+        # else:
+        #     if int(number[0]) == 1:
+        #         self.exit_text.setText("одна гривня")
+        #     elif int(number[0]) == 2 or int(number[0]) == 3 or int(number[0]) == 4:
+        #         self.exit_text.setText(
+        #             self.int_to_ua(int(number[0])) + " гривні")
+        #     else:
+        #         self.exit_text.setText(
+        #             self.int_to_ua(int(number[0])) + " гривень")
+
+
+        if int(number[0]) == 1:
+            self.exit_text.setText("одна гривня")
+        elif int(number[0]) == 2 or int(number[0]) == 3 or int(number[0]) == 4:
+            self.exit_text.setText(
+                self.int_to_ua(int(number[0])) + " гривні")
         else:
-            if int(number[0]) == 1:
-                self.exit_text.setText("одна гривня")
-            elif int(number[0]) == 2 or int(number[0]) == 3 or int(number[0]) == 4:
-                self.exit_text.setText(
-                    self.int_to_ua(int(number[0])) + " гривні")
-            else:
-                self.exit_text.setText(
-                    self.int_to_ua(int(number[0])) + " гривень")
+            self.exit_text.setText(
+            self.int_to_ua(int(number[0])) + " гривень")
 
             self.uah = self.exit_text.toPlainText()
 
@@ -151,7 +161,6 @@ class Example(QWidget):
             else:
                 self.exit_text.setText(
                     self.int_to_en(int(number[0])) + " dollars")
-
             if int(number[0]) == 0 and int(number[1]) != 0:
                 if int(number[1]) == 1:
                     self.exit_text.setText("one cent")
