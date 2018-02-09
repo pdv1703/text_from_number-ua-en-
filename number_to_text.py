@@ -40,10 +40,12 @@ class Example(QWidget):
     def change_separator(self):
         if self.language.currentText() == "En":
             self.insert_number_line.setText("")
+            self.exit_text.setText("")
             self.validator = QRegExpValidator(QRegExp(r'\d{1,7}\.\d{1,2}'), self)
             self.insert_number_line.setValidator(self.validator)
         if self.language.currentText() == "Ua":
             self.insert_number_line.setText("")
+            self.exit_text.setText("")
             self.validator = QRegExpValidator(QRegExp(r'\d{1,7}\,\d{1,2}'), self)
             self.insert_number_line.setValidator(self.validator)
 
@@ -85,12 +87,16 @@ class Example(QWidget):
                 self.number.append(arg)
             self.convert_en(self.number)
 
+
     def convert_ua(self, number):
         """General Ua func"""
         if (len(self.number)) == 1:
             self.number.append("00")
         if self.number[1] == '':
             self.number[1] = "00"
+        if self.number[0] == '':
+            self.number[0] = "00"
+
         coin = number[1]
 
         if int(number[0]) == 0 and int(number[1]) == 0:
@@ -109,7 +115,7 @@ class Example(QWidget):
                 if int(number[1]) == 1:
                     self.uah = self.exit_text.toPlainText()
                     self.exit_text.setText("одна копійка")
-                elif int(coin[1]) == 4 or int(coin[1]) == 3 or int(coin[1]) == 2:
+                elif int(coin) == 4 or int(coin) == 3 or int(coin) == 2:
                     if int(number[1]) == 14 or int(number[1]) == 13 or int(number[1]) == 12:
                         self.uah = self.exit_text.toPlainText()
                         self.exit_text.setText(self.int_to_ua(int(number[1])) + " копійок")
@@ -120,12 +126,11 @@ class Example(QWidget):
                     if int(number[1]) != 0:
                         self.uah = self.exit_text.toPlainText()
                         self.exit_text.setText(self.int_to_ua(int(number[1])) + " копійок")
-
             else:
                 if int(number[1]) == 1:
                     self.uah = self.exit_text.toPlainText()
                     self.exit_text.setText(self.uah + " та одна копійка")
-                elif int(coin[1]) == 4 or int(coin[1]) == 3 or int(coin[1]) == 2:
+                elif int(coin) == 4 or int(coin) == 3 or int(coin) == 2:
                     self.uah = self.exit_text.toPlainText()
                     self.exit_text.setText(
                         self.uah + " та " +
@@ -144,6 +149,8 @@ class Example(QWidget):
             self.number.append("00")
         if self.number[1] == '':
             self.number[1] = "00"
+        if self.number[0] == '':
+            self.number[0] = "00"
 
         if int(number[0]) == 0 and int(number[1]) == 0:
             self.exit_text.setText("zero dollar")
