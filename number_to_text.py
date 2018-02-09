@@ -1,6 +1,9 @@
 import sys
 from PyQt5.QtWidgets import (QWidget, QApplication, QTextEdit, QPushButton,
-                             QLabel, QGridLayout, QComboBox, QDoubleSpinBox)
+                             QLabel, QGridLayout, QComboBox, QDoubleSpinBox, QLineEdit)
+
+from PyQt5.QtCore import (QRegExp)
+from PyQt5.QtGui import (QRegExpValidator)
 
 import decimal
 
@@ -9,13 +12,17 @@ class Example(QWidget):
         super().__init__()
 
         # start button
-        self.go_button = QPushButton('&Start converting')
+        # self.go_button = QPushButton('&Start converting')
 
         # line for inserting
-        self.insert_number_line = QDoubleSpinBox()
+        # self.insert_number_line = QDoubleSpinBox()
+        # self.insert_number_line.setRange(0, 2147483647)
+        # self.insert_number_line.editingFinished.connect(self.convert)
 
-        self.insert_number_line.setRange(0, 2147483647)
-        self.insert_number_line.editingFinished.connect(self.convert)
+        # for testing validator==================
+        self.insert_number_line = QLineEdit()
+        self.validator = QRegExpValidator(QRegExp(r'\d{1,7}\.\d{1,2}'), self)
+        self.insert_number_line.setValidator(self.validator)
 
         # language list
         self.language_title = QLabel('Language:')
@@ -24,18 +31,29 @@ class Example(QWidget):
         self.language.addItem('En')
         self.language.addItem('Ua')
 
-
+        # exit text
         self.exit_text = QTextEdit()
         # self.exit_text.setEnabled(0)
 
         self.initui()
 
+    def change_separator(self):
+        if self.language.currentText() == "En":
+            self.insert_number_line.setText("")
+            self.validator = QRegExpValidator(QRegExp(r'\d{1,7}\.\d{1,2}'), self)
+            self.insert_number_line.setValidator(self.validator)
+        if self.language.currentText() == "Ua":
+            self.insert_number_line.setText("")
+            self.validator = QRegExpValidator(QRegExp(r'\d{1,7}\,\d{1,2}'), self)
+            self.insert_number_line.setValidator(self.validator)
+
+
     def initui(self):
 
         grid = QGridLayout()
         grid.setSpacing(10)
-        grid.addWidget(self.go_button, 2, 0)
-        grid.addWidget(self.insert_number_line, 2, 1)
+        #grid.addWidget(self.go_button, 2, 0)
+        grid.addWidget(self.insert_number_line, 2, 0, 1, 0)
         grid.addWidget(self.language_title, 1, 0)
         grid.addWidget(self.language, 1, 1)
         grid.addWidget(self.exit_text, 3, 0, 3, 2)
@@ -45,7 +63,10 @@ class Example(QWidget):
         self.setWindowTitle('Convert number to text')
         self.show()
 
-        self.go_button.clicked.connect(self.convert)
+        self.language.currentIndexChanged.connect(self.change_separator)
+        self.insert_number_line.textEdited.connect(self.convert)
+
+        #self.go_button.clicked.connect(self.convert)
 
     def convert(self):
         self.exit_text.setText("")
@@ -54,22 +75,22 @@ class Example(QWidget):
 
         self.number = []
 
-        if self.insert_number_line.locale().decimalPoint() == ".":
-            for arg in self.insert_number.split("."):
-                self.number.append(arg)
-
-        if self.insert_number_line.locale().decimalPoint() == ",":
+        if self.language.currentText() == "Ua":
             for arg in self.insert_number.split(","):
                 self.number.append(arg)
-
-        if self.language.currentText() == "Ua":
             self.convert_ua(self.number)
 
         if self.language.currentText() == "En":
+            for arg in self.insert_number.split("."):
+                self.number.append(arg)
             self.convert_en(self.number)
 
     def convert_ua(self, number):
         """General Ua func"""
+        if (len(self.number)) == 1:
+            self.number.append("00")
+        if self.number[1] == '':
+            self.number[1] = "00"
         coin = number[1]
 
         if int(number[0]) == 0 and int(number[1]) == 0:
@@ -119,6 +140,10 @@ class Example(QWidget):
 
     def convert_en(self, number):
         """General En func"""
+        if (len(self.number)) == 1:
+            self.number.append("00")
+        if self.number[1] == '':
+            self.number[1] = "00"
 
         if int(number[0]) == 0 and int(number[1]) == 0:
             self.exit_text.setText("zero dollar")
