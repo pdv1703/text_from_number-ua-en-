@@ -6,6 +6,8 @@ from PyQt5.QtCore import (QRegExp)
 from PyQt5.QtGui import (QRegExpValidator)
 
 import decimal
+import re
+
 
 class Example(QWidget):
     def __init__(self):
@@ -49,12 +51,11 @@ class Example(QWidget):
             self.validator = QRegExpValidator(QRegExp(r'\d{1,7}\,\d{1,2}'), self)
             self.insert_number_line.setValidator(self.validator)
 
-
     def initui(self):
 
         grid = QGridLayout()
         grid.setSpacing(10)
-        #grid.addWidget(self.go_button, 2, 0)
+        # grid.addWidget(self.go_button, 2, 0)
         grid.addWidget(self.insert_number_line, 2, 0, 1, 0)
         grid.addWidget(self.language_title, 1, 0)
         grid.addWidget(self.language, 1, 1)
@@ -68,42 +69,32 @@ class Example(QWidget):
         self.language.currentIndexChanged.connect(self.change_separator)
         self.insert_number_line.textEdited.connect(self.convert)
 
-        #self.go_button.clicked.connect(self.convert)
+        # self.go_button.clicked.connect(self.convert)
 
     def convert(self):
         self.exit_text.setText("")
 
-        self.insert_number = self.insert_number_line.text()
-
         self.number = []
 
+        self.insert_number = self.insert_number_line.text().replace(',', '.')
+
+        for arg in self.insert_number.split("."):
+            self.number.append(arg)
+        if (len(self.number)) == 1:
+            self.number.append("00")
+        if self.number[1] == '':
+            self.number[1] = "00"
+        if self.number[0] == '':
+            self.number[0] = "00"
+
         if self.language.currentText() == "Ua":
-            for arg in self.insert_number.split(","):
-                self.number.append(arg)
-            if (len(self.number)) == 1:
-                self.number.append("00")
-            if self.number[1] == '':
-                self.number[1] = "00"
-            if self.number[0] == '':
-                self.number[0] = "00"
             self.convert_ua(self.number)
 
         if self.language.currentText() == "En":
-            for arg in self.insert_number.split("."):
-                self.number.append(arg)
-
-            if (len(self.number)) == 1:
-                self.number.append("00")
-            if self.number[1] == '':
-                self.number[1] = "00"
-            if self.number[0] == '':
-                self.number[0] = "00"
             self.convert_en(self.number)
-
 
     def convert_ua(self, number):
         """General Ua func"""
-        print(number)
 
         coin = number[1]
         if int(coin) > 9:
@@ -125,10 +116,9 @@ class Example(QWidget):
             self.uah = self.exit_text.toPlainText()
 
             if int(number[0]) == 0 and int(number[1]) != 0:
-                if  coin == 1 and int(number[1]) != 11:
+                if coin == 1 and int(number[1]) != 11:
                     self.exit_text.setText(self.int_to_ua(int(number[1])) + " копійка")
                 elif int(coin) == 4 or int(coin) == 3 or int(coin) == 2:
-                    print(coin)
                     if int(number[1]) == 14 or int(number[1]) == 13 or int(number[1]) == 12 or int(number[1]) == 11:
                         self.exit_text.setText(self.int_to_ua(int(number[1])) + " копійок")
                     else:
@@ -136,8 +126,7 @@ class Example(QWidget):
                 else:
                     self.exit_text.setText(self.int_to_ua(int(number[1])) + " копійок")
             else:
-                if  coin == 1 and int(number[1]) != 11:
-
+                if coin == 1 and int(number[1]) != 11:
                     self.exit_text.setText(
                         self.uah + " та " +
                         self.int_to_ua(int(number[1])) + " копійка")
@@ -150,7 +139,6 @@ class Example(QWidget):
                         self.exit_text.setText(
                             self.uah + " та " +
                             self.int_to_ua(int(number[1])) + " копійок")
-
 
     def convert_en(self, number):
         """General En func"""
@@ -266,7 +254,7 @@ class Example(QWidget):
             return self.int_to_en(num // t) + ' trillion, ' + self.int_to_en(
                 num % t)
 
-        # ======================= Ua section ===============
+            # ======================= Ua section ===============
 
     units = (u'нуль', (u'одна', u'одна'), (u'два', u'дві'), u'три', u'чотири',
              u"п'ять", u'шість', u'сім', u'вісім', u"дев'ять")
@@ -321,7 +309,7 @@ class Example(QWidget):
         return plural, name
 
     def int_to_ua(self, num, main_units=((u'', u'', u''), 'm')):
-        _orders = (main_units, ) + self.orders
+        _orders = (main_units,) + self.orders
         if num == 0:
             return ' '.join((self.units[0], _orders[0][0][2])).strip()
 
@@ -345,7 +333,7 @@ class Example(QWidget):
                      int_units=(('', '', ''), 'm'),
                      exp_units=(('', '', ''), 'm')):
         value = decimal.Decimal(value)
-        q = decimal.Decimal(10)**-places
+        q = decimal.Decimal(10) ** -places
 
         integral, exp = str(value.quantize(q)).split('.')
         return u'{} {}'.format(
