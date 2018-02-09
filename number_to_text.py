@@ -80,24 +80,35 @@ class Example(QWidget):
         if self.language.currentText() == "Ua":
             for arg in self.insert_number.split(","):
                 self.number.append(arg)
+            if (len(self.number)) == 1:
+                self.number.append("00")
+            if self.number[1] == '':
+                self.number[1] = "00"
+            if self.number[0] == '':
+                self.number[0] = "00"
             self.convert_ua(self.number)
 
         if self.language.currentText() == "En":
             for arg in self.insert_number.split("."):
                 self.number.append(arg)
+
+            if (len(self.number)) == 1:
+                self.number.append("00")
+            if self.number[1] == '':
+                self.number[1] = "00"
+            if self.number[0] == '':
+                self.number[0] = "00"
             self.convert_en(self.number)
 
 
     def convert_ua(self, number):
         """General Ua func"""
-        if (len(self.number)) == 1:
-            self.number.append("00")
-        if self.number[1] == '':
-            self.number[1] = "00"
-        if self.number[0] == '':
-            self.number[0] = "00"
+        print(number)
 
         coin = number[1]
+        if int(coin) > 9:
+            coin = coin[1]
+        coin = int(coin)
 
         if int(number[0]) == 0 and int(number[1]) == 0:
             self.exit_text.setText("нуль гривень")
@@ -111,33 +122,31 @@ class Example(QWidget):
                 self.exit_text.setText(
                     self.int_to_ua(int(number[0])) + " гривень")
 
+            self.uah = self.exit_text.toPlainText()
+
             if int(number[0]) == 0 and int(number[1]) != 0:
-                if int(number[1]) == 1:
-                    self.uah = self.exit_text.toPlainText()
-                    self.exit_text.setText("одна копійка")
+                if  coin == 1 and int(number[1]) != 11:
+                    self.exit_text.setText(self.int_to_ua(int(number[1])) + " копійка")
                 elif int(coin) == 4 or int(coin) == 3 or int(coin) == 2:
-                    if int(number[1]) == 14 or int(number[1]) == 13 or int(number[1]) == 12:
-                        self.uah = self.exit_text.toPlainText()
+                    print(coin)
+                    if int(number[1]) == 14 or int(number[1]) == 13 or int(number[1]) == 12 or int(number[1]) == 11:
                         self.exit_text.setText(self.int_to_ua(int(number[1])) + " копійок")
                     else:
-                        self.uah = self.exit_text.toPlainText()
                         self.exit_text.setText(self.int_to_ua(int(number[1])) + " копійки")
                 else:
-                    if int(number[1]) != 0:
-                        self.uah = self.exit_text.toPlainText()
-                        self.exit_text.setText(self.int_to_ua(int(number[1])) + " копійок")
+                    self.exit_text.setText(self.int_to_ua(int(number[1])) + " копійок")
             else:
-                if int(number[1]) == 1:
-                    self.uah = self.exit_text.toPlainText()
-                    self.exit_text.setText(self.uah + " та одна копійка")
+                if  coin == 1 and int(number[1]) != 11:
+
+                    self.exit_text.setText(
+                        self.uah + " та " +
+                        self.int_to_ua(int(number[1])) + " копійка")
                 elif int(coin) == 4 or int(coin) == 3 or int(coin) == 2:
-                    self.uah = self.exit_text.toPlainText()
                     self.exit_text.setText(
                         self.uah + " та " +
                         self.int_to_ua(int(number[1])) + " копійки")
                 else:
                     if int(number[1]) != 0:
-                        self.uah = self.exit_text.toPlainText()
                         self.exit_text.setText(
                             self.uah + " та " +
                             self.int_to_ua(int(number[1])) + " копійок")
@@ -145,12 +154,6 @@ class Example(QWidget):
 
     def convert_en(self, number):
         """General En func"""
-        if (len(self.number)) == 1:
-            self.number.append("00")
-        if self.number[1] == '':
-            self.number[1] = "00"
-        if self.number[0] == '':
-            self.number[0] = "00"
 
         if int(number[0]) == 0 and int(number[1]) == 0:
             self.exit_text.setText("zero dollar")
@@ -265,7 +268,7 @@ class Example(QWidget):
 
         # ======================= Ua section ===============
 
-    units = (u'нуль', (u'один', u'одна'), (u'два', u'дві'), u'три', u'чотири',
+    units = (u'нуль', (u'одна', u'одна'), (u'два', u'дві'), u'три', u'чотири',
              u"п'ять", u'шість', u'сім', u'вісім', u"дев'ять")
 
     teens = (u'десять', u'одинадцять', u'дванадцять', u'тринадцять',
