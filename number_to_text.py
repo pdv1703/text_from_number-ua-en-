@@ -101,20 +101,7 @@ class Example(QWidget):
             coin = coin[1]
         coin = int(coin)
 
-        # if int(number[0]) == 0 and int(number[1]) == 0:
-        #     self.exit_text.setText("нуль гривень")
-        # else:
-        #     if int(number[0]) == 1:
-        #         self.exit_text.setText("одна гривня")
-        #     elif int(number[0]) == 2 or int(number[0]) == 3 or int(number[0]) == 4:
-        #         self.exit_text.setText(
-        #             self.int_to_ua(int(number[0])) + " гривні")
-        #     else:
-        #         self.exit_text.setText(
-        #             self.int_to_ua(int(number[0])) + " гривень")
-
-
-        if int(number[0]) == 1:
+        if int(number[0]) == 1 and int(number[1]) == 0:
             self.exit_text.setText("одна гривня")
         elif int(number[0]) == 2 or int(number[0]) == 3 or int(number[0]) == 4:
             self.exit_text.setText(
@@ -141,9 +128,14 @@ class Example(QWidget):
                         self.uah + " та " +
                         self.int_to_ua(int(number[1])) + " копійка")
                 elif int(coin) == 4 or int(coin) == 3 or int(coin) == 2:
-                    self.exit_text.setText(
-                        self.uah + " та " +
-                        self.int_to_ua(int(number[1])) + " копійки")
+                    if int(number[1]) == 14 or int(number[1]) == 13 or int(number[1]) == 12 or int(number[1]) == 11:
+                        self.exit_text.setText(
+                            self.uah + " та " +
+                            self.int_to_ua(int(number[1])) + " копійок")
+                    else:
+                        self.exit_text.setText(
+                            self.uah + " та " +
+                            self.int_to_ua(int(number[1])) + " копійки")
                 else:
                     if int(number[1]) != 0:
                         self.exit_text.setText(
@@ -289,7 +281,7 @@ class Example(QWidget):
         prev = 0
         plural = 2
         name = []
-        use_teens = rest % 100 >= 10 and rest % 100 <= 19
+        use_teens = 10 <= rest % 100 <= 19
         if not use_teens:
             data = ((self.units, 10), (self.tens, 100), (self.hundreds, 1000))
         else:
