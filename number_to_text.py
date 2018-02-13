@@ -72,7 +72,7 @@ class Example(QWidget):
         # self.go_button.clicked.connect(self.convert)
 
     def convert(self):
-        self.exit_text.setText("")
+        # self.exit_text.setText("")
 
         self.number = []
 
@@ -95,6 +95,7 @@ class Example(QWidget):
 
     def convert_ua(self, number):
         """General Ua func"""
+        self.exit_text.setText("")
 
         coin = number[1]
         if int(coin) > 9:
@@ -103,7 +104,7 @@ class Example(QWidget):
 
         if int(number[0]) == 1 and int(number[1]) == 0:
             self.exit_text.setText("одна гривня")
-        elif int(number[0]) == 2 or int(number[0]) == 3 or int(number[0]) == 4:
+        elif (int(number[0]) == 2  or int(number[0]) == 3 or int(number[0]) == 4) and int(number[1]) == 0:
             self.exit_text.setText(
                 self.int_to_ua(int(number[0])) + " гривні")
         else:
